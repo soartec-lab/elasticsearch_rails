@@ -8,6 +8,11 @@ class Elasticsearch::Base
     @client = Elasticsearch::Client.new url: connection_url
   end
 
+  def healthy?
+    status = client.cluster.health["status"]
+    status == "green"
+  end
+
   def self.create(attributes = nil)
     object = new
     client = object.client
