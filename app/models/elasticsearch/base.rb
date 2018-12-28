@@ -46,5 +46,13 @@ class Elasticsearch::Base
 
     client.indices.create index: index, body: body
   end
+
+  def self.delete_scheme
+    object = new
+    client = object.client
+    index = object.index
+
+    client.indices.delete index: [index], ignore: 404
+  end
 end
 
