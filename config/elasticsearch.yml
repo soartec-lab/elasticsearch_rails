@@ -1,6 +1,7 @@
 default: &default
   host: localhost
   port: 9200
+  index: elasticsearch_rails
 
 development:
   <<: *default
