@@ -14,6 +14,13 @@ class Elasticsearch::Base
     status == "green"
   end
 
+  def properties
+    {
+      title: { type: 'text', analyzer: "kuromoji" },
+      description: { type: 'text', analyzer: "kuromoji" }
+    }
+  end
+
   def self.create(attributes = nil)
     object = new
     client = object.client
@@ -23,7 +30,7 @@ class Elasticsearch::Base
     client.index index: index, type: type, body: attributes
   end
 
-  def self.scheme_create
+  def self.create_scheme
     object = new
     client = object.client
     index = object.index
@@ -32,20 +39,11 @@ class Elasticsearch::Base
     body = {
       mappings: {
         "#{type}" => {
-          properties: {
-            title: {
-              type: 'text',
-              analyzer: "kuromoji"
-            },
-            description: {
-              type: 'text',
-              analyzer: "kuromoji"
-            }
-          }
+          properties: object.properties
         }
       }
     }
-    
+
     client.indices.create index: index, body: body
   end
 end
