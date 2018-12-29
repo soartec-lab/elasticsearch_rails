@@ -52,6 +52,21 @@ class Elasticsearch::Base
     result["result"] == "created" ? true : raise
   end
 
+  # using
+  # Elasticsearch::Base.find('kQiD9WcB0q1F0jm0anRr')
+  # => {"title"=>"title1", "description"=>"description1"}
+  # Elasticsearch::Base.find('invalid_id')
+  # => Elasticsearch::Transport::Transport::Errors::NotFound: [404]
+  def self.find(id)
+    object = new
+    client = object.client
+    index = object.index
+    type = object.type
+
+    result = client.get index: index, type: type, id: id
+    result.dig("_source", "attributes")
+  end
+
   def self.create_scheme
     object = new
     client = object.client
