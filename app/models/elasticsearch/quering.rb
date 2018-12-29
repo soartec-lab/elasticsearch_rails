@@ -8,8 +8,6 @@ module Elasticsearch
     def find(id)
       object = new
       client = object.client
-      index = object.index
-      type = object.type
 
       result = client.get index: index, type: type, id: id
       result.dig("_source", "attributes")
@@ -33,8 +31,6 @@ module Elasticsearch
       object.validate!
 
       client = object.client
-      index = object.index
-      type = object.type
       body = { query: { match: attributes } }
 
       result = client.search index: index, type: type, body: body

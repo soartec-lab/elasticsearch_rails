@@ -4,14 +4,12 @@ class Elasticsearch::Base
   extend Elasticsearch::Persistence
   include Elasticsearch::Validates
 
-  attr_reader :attributes, :client, :index, :type
+  attr_reader :attributes, :client, :index
 
   def initialize(attributes = nil)
     @attributes = attributes
-    @type = self.class.name.tableize
 
-    @configrations = Elasticsearch::Configurations.new    
-    @index = @configrations.index
+    @configrations = Elasticsearch::Configurations.new
     @client = Elasticsearch::Client.new url: @configrations.connection_url
   end
 end

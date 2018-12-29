@@ -3,8 +3,6 @@ module Elasticsearch
     def create_scheme
       object = new
       client = object.client
-      index = object.index
-      type = object.type
 
       body = {
         mappings: {
@@ -20,7 +18,6 @@ module Elasticsearch
     def delete_scheme
       object = new
       client = object.client
-      index = object.index
 
       client.indices.delete index: [index], ignore: 404
     end
@@ -38,6 +35,14 @@ module Elasticsearch
         title: { type: 'text', analyzer: "kuromoji" },
         description: { type: 'text', analyzer: "kuromoji" }
       }
+    end
+
+    def index
+      Elasticsearch::Configurations.new.index
+    end
+
+    def type
+      name.tableize
     end
   end
 end

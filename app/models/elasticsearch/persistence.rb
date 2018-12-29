@@ -14,8 +14,6 @@ module Elasticsearch
       object.validate!
 
       client = object.client
-      index = object.index
-      type = object.type
 
       result = client.create index: index, type: type, body: attributes
       result["result"] == "created" ? true : raise
