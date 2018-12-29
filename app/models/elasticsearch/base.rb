@@ -48,7 +48,7 @@ class Elasticsearch::Base
     index = object.index
     type = object.type
 
-    result = client.index index: index, type: type, body: attributes
+    result = client.create index: index, type: type, body: attributes
     result["result"] == "created" ? true : raise
   end
 
@@ -72,6 +72,25 @@ class Elasticsearch::Base
     client = object.client
 
     client.count["count"]
+  end
+
+  # using
+  # Elasticsearch::Base.match(title: "title1")
+  # => {"title"=>"title1", "description"=>"description1"}
+  # Elasticsearch::Base.match(title: 'invalid_title')
+  # => []
+
+  def self.match(attributes = nil)
+    object = new(attributes)
+    object.validate!
+
+    client = object.client
+    index = object.index
+    type = object.type
+    body = { query: { match: attributes } }
+
+    result = client.search index: index, type: type, body: body
+    result.dig("hits", "hits").map { |hit| hit["_source"] }
   end
 
   def self.create_scheme
