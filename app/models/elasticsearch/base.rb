@@ -67,6 +67,13 @@ class Elasticsearch::Base
     result.dig("_source", "attributes")
   end
 
+  def self.count
+    object = new
+    client = object.client
+
+    client.count["count"]
+  end
+
   def self.create_scheme
     object = new
     client = object.client
